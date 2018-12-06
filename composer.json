@@ -1,0 +1,16 @@
+{
+    "name": "zouhuigang/alilog",
+    "version": "0.0.1",
+    "autoload": {
+      "psr-4": {"zouhuigang\\alilog\\": "src"}
+    },
+    "description": "aliyun log",
+    "license": "Apache-2.0",
+    "authors": [
+      {
+        "name": "zouhuigang",
+        "email": "952750120@qq.com"
+      }
+    ],
+    "require": {
+    }}
