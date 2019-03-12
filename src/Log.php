@@ -59,32 +59,45 @@ class Log{
     msg:文本
     stype:保存日志的类型,0本地和远程都保存，1只保存本地，2只保存远程
     */
-    public function write_log($key,$msg,$stype=0){
+    public function write_log($loglevel,$msg,$data,$stype=0){
             $stype=(int)$stype;
+            //如果传了数组，则转为json
+            if(is_array($data)){
+                $data=json_encode($data,JSON_UNESCAPED_UNICODE);
+            }
+
             if($stype==1){
-                $this->write_log_to_local($key,$msg);
+                $this->write_log_to_local($loglevel,$msg,$data);
             }else if($stype==2){
-                $this->write_log_to_aliyun($key,$msg);
+                $this->write_log_to_aliyun($loglevel,$msg,$data);
             }else{
-                $this->write_log_to_aliyun($key,$msg);
-                $this->write_log_to_local($key,$msg);
+                $this->write_log_to_aliyun($loglevel,$msg,$data);
+                $this->write_log_to_local($loglevel,$msg,$data);
             }
            
     }
 
 
     //写入日志到远程
-    private function write_log_to_aliyun($key,$msg){
+    private function write_log_to_aliyun($key,$msg,$data){
         $nkey=strtoupper($key);
-        $contents[$nkey]=$msg;    
+        $contents['LOGLEVEL']=$nkey;
+        if($msg){
+            $contents["MSG"]=$msg;   
+        }
+
+        if($data){
+            $contents["DATA"]=$data;
+        }
+          
         $this->putLogs($contents);
         return true;
     }
 
     //写入日志到本地
-    private function write_log_to_local($key,$msg){
+    private function write_log_to_local($key,$msg,$data){
         $nkey=strtoupper($key);
-        $content=$nkey.':'.$msg;
+        $content=$nkey.':'.$msg.':'.$data;
         $destination = $this->config['path'] . date('y_m_d') . '.log';
         return error_log( date ( "[YmdHis]" ) ."\t" . $content . "\r\n", 3, $destination);
     }

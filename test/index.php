@@ -20,7 +20,9 @@ $sls = new \zouhuigang\alilog\Log($config);
 $log=array(
     "msg"=>["测试传一段json","成功了吗"]
 );
-$sls->write_log('info',json_encode($log,JSON_UNESCAPED_UNICODE));
+// $sls->write_log('info',json_encode($log,JSON_UNESCAPED_UNICODE));
 
-$sls->write_log('ERROR',"出错啦",2);
+$sls->write_log('ERROR','msg',$log,2);
+$sls->write_log('ERROR','msg',"data",2);
+$sls->write_log('ERROR','msg',$log);
 echo "写入日志完成";die;
